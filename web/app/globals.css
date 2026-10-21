@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* ── O céu de Sophia — tema único: noite ─────────────────────────────────────
+   A moradia é o sol (dourado); a vida orbita em volta. Tokens de superfície e
+   tinta primeiro; as cores dos domínios da vida entram quando o céu existir. */
+
+@theme {
+  /* superfícies */
+  --color-sky: #0a1322; /* o céu — fundo da página */
+  --color-card: #111c30; /* painéis */
+  --color-card-2: #17253e; /* hover / camada elevada */
+  --color-line: #1e2c4a; /* hairlines */
+
+  /* tinta */
+  --color-ink: #edf1f8;
+  --color-ink-2: #9dacc8;
+  --color-mute: #6c7d9e;
+
+  /* o sol (moradia) */
+  --color-gold: #c98500;
+  --color-gold-hi: #f0b03c;
+
+  /* status (reservado: bom/ruim — nunca decoração) */
+  --color-good: #0ca30c;
+  --color-bad: #d03b3b;
+  --color-warn: #fab219; /* âmbar: "falta você" (input humano pendente) */
+  --color-info: #4f8fe0; /* azul: "router" (dado automático / aguardando cálculo) */
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-sky);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-gold) 40%, transparent);
+}
+
+/* micro-rótulo de instrumento: mono, espaçado, maiúsculo */
+.microlabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── pins do "céu no mapa" (leaflet divIcon) ────────────────────────────── */
+.map-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--color-card-2);
+  border: 2px solid var(--color-line);
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+.map-pin-sun {
+  background: color-mix(in oklab, var(--color-gold) 35%, var(--color-card-2));
+  border-color: var(--color-gold-hi);
+  font-size: 1.3rem;
+}
+
+/* popup do leaflet no tema da página — prefixado com .leaflet-container para
+   ganhar do leaflet.css (mesma especificidade base; o chunk do leaflet.css é
+   injetado depois do globals.css por ser um import de client component
+   carregado via next/dynamic, então a ordem de cascata não é confiável). */
+.leaflet-container .leaflet-popup-content-wrapper,
+.leaflet-container .leaflet-popup-tip {
+  background: var(--color-card-2);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+.leaflet-container .leaflet-popup-content {
+  margin: 10px 14px;
+}
+.leaflet-container .leaflet-popup a.leaflet-popup-close-button {
+  color: var(--color-mute);
+}
+

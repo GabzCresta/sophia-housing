@@ -1,0 +1,23 @@
+{
+  "Lidl":            { "is_discount": true,  "price_index": 0.82, "market_type": "discount" },
+  "Aldi":            { "is_discount": true,  "price_index": 0.82, "market_type": "discount" },
+  "Netto":           { "is_discount": true,  "price_index": 0.85, "market_type": "discount" },
+  "Leader Price":    { "is_discount": true,  "price_index": 0.88, "market_type": "discount" },
+  "E.Leclerc":       { "is_discount": true,  "price_index": 0.90, "market_type": "hipermercado" },
+  "Leclerc":         { "is_discount": true,  "price_index": 0.90, "market_type": "hipermercado" },
+  "Intermarché":     { "is_discount": false, "price_index": 0.95, "market_type": "supermercado" },
+  "Auchan":          { "is_discount": false, "price_index": 0.95, "market_type": "hipermercado" },
+  "Super U":         { "is_discount": false, "price_index": 0.97, "market_type": "supermercado" },
+  "Hyper U":         { "is_discount": false, "price_index": 0.96, "market_type": "hipermercado" },
+  "Carrefour Market":{ "is_discount": false, "price_index": 1.02, "market_type": "supermercado" },
+  "Carrefour City":  { "is_discount": false, "price_index": 1.08, "market_type": "mercearia" },
+  "Carrefour":       { "is_discount": false, "price_index": 1.00, "market_type": "hipermercado" },
+  "Casino":          { "is_discount": false, "price_index": 1.10, "market_type": "supermercado" },
+  "Monoprix":        { "is_discount": false, "price_index": 1.15, "market_type": "supermercado" },
+  "Monop'":          { "is_discount": false, "price_index": 1.15, "market_type": "supermercado" },
+  "Naturalia":       { "is_discount": false, "price_index": 1.25, "market_type": "bio" },
+  "Picard":          { "is_discount": false, "price_index": 1.10, "market_type": "congelados" },
+  "Franprix":        { "is_discount": false, "price_index": 1.12, "market_type": "mercearia" },
+  "Spar":            { "is_discount": false, "price_index": 1.10, "market_type": "mercearia" },
+  "Cocci":           { "is_discount": false, "price_index": 1.12, "market_type": "mercearia" }
+}

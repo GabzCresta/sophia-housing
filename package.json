@@ -1,0 +1,14 @@
+{
+  "name": "housing-decision-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Base de dados + router de rotas (Google Maps) para decisão de moradia — SKEMA Sophia Antipolis",
+  "scripts": {
+    "router": "node scripts/router.js",
+    "router:force": "node scripts/router.js --force"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

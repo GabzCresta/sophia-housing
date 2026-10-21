@@ -1,0 +1,570 @@
+// =============================================================================
+// Housing Decision Platform — schema.prisma (ESPELHO OPCIONAL do SQL)
+// =============================================================================
+// O SQL (migrations/ + schema.sql) é a FONTE DA VERDADE. Este arquivo existe só
+// para conforto de um app Next.js/TypeScript. As VIEWS (v_*) NÃO estão aqui
+// (recurso de views do Prisma é preview) — consulte-as por SQL cru quando precisar.
+// Gerado à mão para casar 1:1 com o schema; validado com `prisma validate`.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── ENUMs (mapeados aos tipos nativos do PostgreSQL) ─────────────────────────
+// Prisma exige um valor por linha. Valores que começam com dígito no banco
+// (ex.: "25m", "2x_mes") ganham um apelido válido + @map para a label real.
+
+enum apartment_status {
+  favorito
+  candidatar
+  analisando
+  descartado
+}
+
+enum charges_type {
+  CC
+  HC
+}
+
+enum unit_type {
+  studio
+  T1
+  T2
+  T3
+}
+
+enum condition_type {
+  novo
+  reformado
+  bom
+  a_renovar
+}
+
+enum view_type {
+  mar
+  jardim
+  rua
+  patio
+}
+
+enum exposure_type {
+  N
+  S
+  L
+  O
+}
+
+enum bathroom_type {
+  banheira
+  chuveiro
+}
+
+enum security_type {
+  guarda
+  digicode
+  interfone
+  cameras
+  nenhum
+}
+
+enum parking_type {
+  box_subsolo
+  rua
+  nenhum
+}
+
+enum lease_type {
+  etudiant
+  mobilite
+  umano
+}
+
+enum guarantor_type {
+  visale
+  studapart
+  pais
+  nenhum
+}
+
+enum place_category {
+  supermarket
+  bakery
+  restaurant
+  bar
+  gym
+  church
+  library
+  coworking
+  campus
+  travel_hub
+  bus_stop
+  gare
+  gas_station
+  hair_salon
+  shopping_mall
+  hospital
+  pharmacy
+}
+
+enum market_type {
+  hipermercado
+  supermercado
+  mercearia
+  discount
+}
+
+enum cuisine_type {
+  francesa
+  italiana
+  pizza
+  kebab
+  mediterranea
+  gastronomica
+  outro
+}
+
+enum restaurant_frequency {
+  toda_semana
+  f2x_mes @map("2x_mes")
+  f1x_mes @map("1x_mes")
+  raro
+}
+
+enum restaurant_occasion {
+  dia_a_dia
+  date
+  amigos
+  especial
+}
+
+enum gym_kind {
+  academia
+  piscina
+  crossfit
+  studio
+  complexo
+}
+
+enum gym_plan_type {
+  mensal
+  trimestral
+  anual
+  student
+}
+
+enum gym_commitment {
+  sem
+  m12_meses @map("12_meses")
+}
+
+enum pool_size {
+  p25m @map("25m")
+  p50m @map("50m")
+  lazer
+}
+
+enum gym_usage_frequency {
+  diario
+  f3_4x_sem @map("3_4x_sem")
+  f1_2x_sem @map("1_2x_sem")
+}
+
+enum church_type {
+  paroquia
+  capela
+  catedral
+  santuario
+}
+
+enum church_usage_frequency {
+  diario
+  domingo
+  ocasional
+}
+
+enum travel_hub_type {
+  aeroporto
+  gare
+  a8
+  destino
+}
+
+enum travel_profile {
+  batevolta_local
+  fds_regiao
+  viagens_maiores
+}
+
+enum travel_frequency {
+  todo_fds
+  f2x_mes @map("2x_mes")
+  mensal
+  raro
+}
+
+enum travel_companions {
+  sozinho
+  namorada
+  amigos
+  familia
+}
+
+enum car_scenario {
+  aluguel_curto
+  leasing
+  comprar
+  sem_carro
+}
+
+enum food_buy_profile {
+  basico
+  cozinha_bastante
+  misto
+}
+
+enum route_mode {
+  driving
+  transit
+  walking
+}
+
+enum zone_type {
+  praia_turistico
+  centro_historico
+  residencial
+  porto
+}
+
+// ── apartments (o SOL) ───────────────────────────────────────────────────────
+model apartments {
+  id            String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  source_portal String?
+  listing_url   String?
+  address       String?
+  contact_info  String? // contato do anúncio (landlord/agência) — decisão à distância (009)
+  lat           Decimal?          @db.Decimal(9, 6)
+  lng           Decimal?          @db.Decimal(9, 6)
+  city          String?
+  neighborhood  String?
+  status        apartment_status  @default(candidatar)
+
+  rent_base_eur    Decimal?      @db.Decimal(10, 2)
+  charges_eur      Decimal?      @db.Decimal(10, 2)
+  charges_type     charges_type?
+  charges_include  String[] // o que as charges cobrem: agua, luz, aquecimento, internet (009)
+  first_month_eur  Decimal?      @db.Decimal(10, 2)
+  admin_fee_eur    Decimal?      @db.Decimal(10, 2)
+  deposit_eur      Decimal?      @db.Decimal(10, 2)
+  apl_estimate_eur Decimal?      @db.Decimal(10, 2)
+
+  unit_type        unit_type?
+  separate_bedroom Boolean?
+  area_m2          Decimal?        @db.Decimal(6, 2)
+  floor            Int?
+  furnished        Boolean?
+  condition        condition_type?
+  terrace          Boolean?
+  terrace_m2       Decimal?        @db.Decimal(6, 2)
+  view_kind        view_type?      @map("view") // "view" é palavra reservada no Prisma → mapeada à coluna real
+  exposure         exposure_type?
+  air_conditioning Boolean?
+  equipped_kitchen Boolean?
+  dishwasher       Boolean?
+  washing_machine  Boolean?
+  bathroom         bathroom_type?
+  brightness_1_5   Int?
+  noise_1_5        Int?
+
+  elevator           Boolean?
+  security           security_type?
+  parking            parking_type?
+  parking_cost_eur   Decimal?      @db.Decimal(10, 2)
+  amenities          String[]
+  building_condition String?
+
+  lease_type               lease_type?
+  available_from           DateTime?       @db.Date
+  available_to             DateTime?       @db.Date
+  guarantor                guarantor_type?
+  guarantor_min_income_eur Decimal?        @db.Decimal(10, 2)
+  student_only             Boolean?
+  mandatory_insurance_eur  Decimal?        @db.Decimal(10, 2)
+
+  pros           String?
+  cons           String?
+  personal_notes String?
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  mobility_profile     mobility_profile?
+  study_profile        study_profile?
+  apartment_area_stats apartment_area_stats?
+  routes               routes[]
+
+  @@index([status])
+  @@index([city])
+  @@index([neighborhood])
+  @@index([lat, lng])
+}
+
+// ── places (os PLANETAS) + detalhes 1:1 ──────────────────────────────────────
+model places {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  category        place_category
+  name            String
+  address         String?
+  lat             Decimal?       @db.Decimal(9, 6)
+  lng             Decimal?       @db.Decimal(9, 6)
+  google_place_id String?        @unique
+  rating          Decimal?       @db.Decimal(2, 1)
+  is_manual       Boolean        @default(false)
+
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  supermarket_details supermarket_details?
+  restaurant_details  restaurant_details?
+  gym_details         gym_details?
+  church_details      church_details?
+  travel_hub_details  travel_hub_details?
+  routes              routes[]
+
+  @@index([category])
+  @@index([lat, lng])
+}
+
+model supermarket_details {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place_id      String       @unique @db.Uuid
+  chain         String?
+  market_type   market_type?
+  is_discount   Boolean      @default(false)
+  price_index   Decimal?     @default(1.00) @db.Decimal(4, 2)
+  marche_nearby Boolean?
+  marche_days   String?
+  created_at    DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  place         places       @relation(fields: [place_id], references: [id], onDelete: Cascade)
+}
+
+model restaurant_details {
+  id               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place_id         String                @unique @db.Uuid
+  cuisine          cuisine_type?
+  price_level      Int?
+  typical_dish     String?
+  dish_price_eur   Decimal?              @db.Decimal(8, 2)
+  drink_eur        Decimal?              @db.Decimal(8, 2)
+  dessert_eur      Decimal?              @db.Decimal(8, 2)
+  service_included Boolean?
+  tip_eur          Decimal?              @db.Decimal(8, 2)
+  frequency        restaurant_frequency?
+  occasion         restaurant_occasion?
+  created_at       DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime              @default(now()) @updatedAt @db.Timestamptz(6)
+  place            places                @relation(fields: [place_id], references: [id], onDelete: Cascade)
+}
+
+model gym_details {
+  id               String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place_id         String               @unique @db.Uuid
+  kind             gym_kind?
+  plan_type        gym_plan_type?
+  monthly_fee_eur  Decimal?             @db.Decimal(8, 2)
+  signup_fee_eur   Decimal?             @db.Decimal(8, 2)
+  commitment       gym_commitment?
+  cancel_fee_eur   Decimal?             @db.Decimal(8, 2)
+  weights          Boolean?
+  classes          Boolean?
+  has_pool         Boolean?
+  pool_size        pool_size?
+  hours            String?
+  quality_1_5      Int?
+  usage_frequency  gym_usage_frequency?
+  fits_routine_1_5 Int?
+  created_at       DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime             @default(now()) @updatedAt @db.Timestamptz(6)
+  place            places               @relation(fields: [place_id], references: [id], onDelete: Cascade)
+}
+
+model church_details {
+  id                   String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place_id             String                  @unique @db.Uuid
+  church_type          church_type?
+  mass_times_week      String?
+  mass_times_sunday    String?
+  confession_adoration String?
+  language             String?
+  has_english_mass     Boolean?
+  youth_group          Boolean?
+  parish_activities    String?
+  community_1_5        Int?
+  usage_frequency      church_usage_frequency?
+  created_at           DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime                @default(now()) @updatedAt @db.Timestamptz(6)
+  place                places                  @relation(fields: [place_id], references: [id], onDelete: Cascade)
+}
+
+model travel_hub_details {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  place_id           String           @unique @db.Uuid
+  hub_type           travel_hub_type?
+  easy_train_daytrip Boolean?
+  created_at         DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime         @default(now()) @updatedAt @db.Timestamptz(6)
+  place              places           @relation(fields: [place_id], references: [id], onDelete: Cascade)
+}
+
+// ── routes (a GRAVIDADE) ─────────────────────────────────────────────────────
+model routes {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  apartment_id  String     @db.Uuid
+  place_id      String     @db.Uuid
+  mode          route_mode
+  distance_m    Int?
+  duration_s    Int?
+  fuel_cost_eur Decimal?   @db.Decimal(8, 2)
+  computed_at   DateTime?  @db.Timestamptz(6)
+  created_at    DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
+
+  apartment apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+  place     places     @relation(fields: [place_id], references: [id], onDelete: Cascade)
+
+  @@unique([apartment_id, place_id, mode])
+  @@index([apartment_id])
+  @@index([place_id])
+  @@index([apartment_id, duration_s])
+}
+
+// ── perfis 1:1 do apê ────────────────────────────────────────────────────────
+model mobility_profile {
+  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  apartment_id         String        @unique @db.Uuid
+  building_parking     parking_type?
+  envibus_lines        String?
+  direct_bus_to_sophia Boolean?
+  created_at           DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+  apartment            apartments    @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+}
+
+model study_profile {
+  id                    String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  apartment_id          String     @unique @db.Uuid
+  desk_space            Boolean?
+  fiber_internet        Boolean?
+  fiber_speed           String?
+  quiet_focus_1_5       Int?
+  natural_light_1_5     Int?
+  coworking_count_10min Int?
+  campus_days_per_week  Int?
+  typical_class_hours   String?
+  early_or_night        Boolean?
+  pros                  String?
+  cons                  String?
+  personal_notes        String?
+  created_at            DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
+  apartment             apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+}
+
+model apartment_area_stats {
+  id                     String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  apartment_id           String     @unique @db.Uuid
+  restaurants_10min_walk Int?
+  bars_10min_walk        Int?
+  nightlife_dist_min     Int?
+  area_variety_1_5       Int?
+  zone_type              zone_type?
+  created_at             DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
+  apartment              apartments @relation(fields: [apartment_id], references: [id], onDelete: Cascade)
+}
+
+// ── config de custo (natureza 1) + grade + settings ──────────────────────────
+model ai_subscriptions {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  monthly_eur Decimal  @default(0) @db.Decimal(8, 2)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model car_config {
+  id                       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  scenario                 car_scenario
+  source                   String?
+  car_model                String?      @map("model") // "model" é palavra reservada no Prisma → mapeada à coluna real
+  km_included              Int?
+  monthly_eur              Decimal?     @db.Decimal(10, 2)
+  purchase_price_eur       Decimal?     @db.Decimal(10, 2)
+  resale_estimate_eur      Decimal?     @db.Decimal(10, 2)
+  months                   Int?
+  insurance_eur            Decimal?     @db.Decimal(10, 2)
+  insurance_deductible_eur Decimal?     @db.Decimal(10, 2)
+  fuel_month_eur           Decimal?     @db.Decimal(10, 2)
+  tolls_eur                Decimal?     @db.Decimal(10, 2)
+  home_parking_eur         Decimal?     @db.Decimal(10, 2)
+  maintenance_eur          Decimal?     @db.Decimal(10, 2)
+  created_at               DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([scenario])
+}
+
+model transit_config {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  student_pass_eur Decimal? @db.Decimal(8, 2)
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model food_profile {
+  id                    String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  monthly_realistic_eur Decimal?          @db.Decimal(10, 2)
+  monthly_optimized_eur Decimal?          @db.Decimal(10, 2)
+  buy_profile           food_buy_profile?
+  created_at            DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime          @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model travel_config {
+  id                         String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  monthly_budget_eur         Decimal?           @db.Decimal(10, 2)
+  profile                    travel_profile?
+  frequency                  travel_frequency?
+  companions                 travel_companions?
+  typical_trip_fuel_toll_eur Decimal?           @db.Decimal(10, 2)
+  booked_flights_trains_eur  Decimal?           @db.Decimal(10, 2)
+  created_at                 DateTime           @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime           @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model class_schedule {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_name String?
+  weekday     Int?
+  start_time  DateTime? @db.Time(6)
+  end_time    DateTime? @db.Time(6)
+  month       String?
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([weekday])
+}
+
+model settings {
+  key        String   @id
+  value      String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+}

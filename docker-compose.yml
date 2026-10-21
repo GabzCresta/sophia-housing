@@ -1,0 +1,29 @@
+# Postgres local persistente para a Housing Decision Platform.
+#   docker compose up -d      → sobe o banco (volume novo já aplica migrations 001-008)
+#   docker compose down       → derruba o container MAS mantém os dados (volume pgdata)
+#   docker compose down -v     → derruba E APAGA os dados (recomeça do zero)
+# Alinhado ao .env: postgres/test @ localhost:55432 / db "sophia".
+
+services:
+  db:
+    image: postgres:16
+    container_name: sophia_pg
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: sophia
+    ports:
+      - "55432:5432"                 # casa com DATABASE_URL do .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # ← isto salva os dados entre reinícios
+      # As migrations rodam SÓ na primeira inicialização (volume vazio), em ordem alfabética.
+      # Depois disso o Postgres ignora esta pasta — os dados vivem no volume pgdata.
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sophia"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

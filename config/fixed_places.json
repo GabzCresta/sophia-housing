@@ -1,0 +1,99 @@
+[
+  {
+    "key": "campus-skema",
+    "category": "campus",
+    "name": "SKEMA Business School — Sophia Antipolis",
+    "address": "60 Rue Dostoïevski, 06902 Sophia Antipolis",
+    "lat": 43.6156,
+    "lng": 7.0731,
+    "modes": ["driving", "transit"]
+  },
+  {
+    "key": "aeroport-nce",
+    "category": "travel_hub",
+    "hub_type": "aeroporto",
+    "name": "Aéroport Nice Côte d'Azur (NCE)",
+    "address": "06206 Nice",
+    "lat": 43.6653,
+    "lng": 7.2159,
+    "modes": ["driving", "transit"]
+  },
+  {
+    "key": "a8-antibes",
+    "category": "travel_hub",
+    "hub_type": "a8",
+    "name": "A8 — Sortie 44 (Antibes)",
+    "address": "Autoroute A8, Antibes",
+    "lat": 43.6019,
+    "lng": 7.1128,
+    "modes": ["driving"]
+  },
+  {
+    "key": "gare-antibes",
+    "category": "gare",
+    "name": "Gare d'Antibes",
+    "address": "Place Pierre Sémard, 06600 Antibes",
+    "lat": 43.5847,
+    "lng": 7.1227,
+    "modes": ["driving", "walking"]
+  },
+  {
+    "key": "gare-juan-les-pins",
+    "category": "gare",
+    "name": "Gare de Juan-les-Pins",
+    "address": "Avenue de l'Estérel, 06160 Antibes",
+    "lat": 43.5686,
+    "lng": 7.1080,
+    "modes": ["driving", "walking"]
+  },
+  {
+    "key": "dest-cannes",
+    "category": "travel_hub",
+    "hub_type": "destino",
+    "name": "Cannes",
+    "address": "06400 Cannes",
+    "lat": 43.5528,
+    "lng": 7.0174,
+    "modes": ["driving", "transit"]
+  },
+  {
+    "key": "dest-nice",
+    "category": "travel_hub",
+    "hub_type": "destino",
+    "name": "Nice",
+    "address": "06000 Nice",
+    "lat": 43.7009,
+    "lng": 7.2683,
+    "modes": ["driving", "transit"]
+  },
+  {
+    "key": "dest-monaco",
+    "category": "travel_hub",
+    "hub_type": "destino",
+    "name": "Monaco",
+    "address": "98000 Monaco",
+    "lat": 43.7384,
+    "lng": 7.4246,
+    "modes": ["driving", "transit"]
+  },
+  {
+    "key": "dest-saint-tropez",
+    "category": "travel_hub",
+    "hub_type": "destino",
+    "name": "Saint-Tropez",
+    "address": "83990 Saint-Tropez",
+    "lat": 43.2670,
+    "lng": 6.6407,
+    "modes": ["driving"]
+  },
+  {
+    "key": "dest-ventimiglia",
+    "category": "travel_hub",
+    "hub_type": "destino",
+    "name": "Ventimiglia (IT)",
+    "address": "18039 Ventimiglia IM, Italia",
+    "lat": 43.7910,
+    "lng": 7.6083,
+    "modes": ["driving", "transit"]
+  }
+]

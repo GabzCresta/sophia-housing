@@ -1,0 +1,186 @@
+[
+  {
+    "category": "supermarket",
+    "includedTypes": [
+      "supermarket"
+    ],
+    "radius_m": 6000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 2000,
+    "near_included_types": [
+      "supermarket"
+    ],
+    "near_max_results": 20
+  },
+  {
+    "category": "bakery",
+    "includedTypes": [
+      "bakery"
+    ],
+    "radius_m": 1500,
+    "modes": [
+      "driving",
+      "walking"
+    ]
+  },
+  {
+    "category": "restaurant",
+    "includedTypes": [
+      "restaurant"
+    ],
+    "radius_m": 1500,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 1500,
+    "near_max_results": 20
+  },
+  {
+    "category": "bar",
+    "includedTypes": [
+      "bar"
+    ],
+    "radius_m": 1500,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 1500,
+    "near_included_types": [
+      "bar",
+      "cafe"
+    ],
+    "near_max_results": 20
+  },
+  {
+    "category": "gym",
+    "includedTypes": [
+      "gym"
+    ],
+    "radius_m": 3000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 2500,
+    "near_included_types": [
+      "gym",
+      "fitness_center"
+    ],
+    "near_max_results": 20
+  },
+  {
+    "category": "church",
+    "includedTypes": [
+      "church"
+    ],
+    "radius_m": 3000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 2500,
+    "near_max_results": 20
+  },
+  {
+    "category": "library",
+    "includedTypes": [
+      "library"
+    ],
+    "radius_m": 4000,
+    "modes": [
+      "driving",
+      "walking"
+    ]
+  },
+  {
+    "category": "gas_station",
+    "includedTypes": [
+      "gas_station"
+    ],
+    "radius_m": 4000,
+    "modes": [
+      "driving"
+    ]
+  },
+  {
+    "category": "bus_stop",
+    "includedTypes": [
+      "bus_station"
+    ],
+    "radius_m": 1200,
+    "modes": [
+      "driving",
+      "walking"
+    ]
+  },
+  {
+    "category": "coworking",
+    "textQuery": "coworking espace de travail",
+    "radius_m": 5000,
+    "modes": [
+      "driving",
+      "walking"
+    ]
+  },
+  {
+    "category": "hair_salon",
+    "includedTypes": [
+      "hair_salon"
+    ],
+    "radius_m": 3000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 2500,
+    "near_included_types": [
+      "hair_salon",
+      "barber_shop"
+    ],
+    "near_max_results": 20
+  },
+  {
+    "category": "shopping_mall",
+    "includedTypes": [
+      "shopping_mall"
+    ],
+    "radius_m": 12000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 5000,
+    "near_max_results": 20
+  },
+  {
+    "category": "hospital",
+    "includedTypes": [
+      "hospital"
+    ],
+    "radius_m": 12000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 5000,
+    "near_max_results": 10
+  },
+  {
+    "category": "pharmacy",
+    "includedTypes": [
+      "pharmacy"
+    ],
+    "radius_m": 3000,
+    "modes": [
+      "driving",
+      "walking"
+    ],
+    "near_radius_m": 2000,
+    "near_max_results": 20
+  }
+]

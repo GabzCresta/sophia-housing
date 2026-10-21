@@ -1,0 +1,16 @@
+# segredos — NUNCA versionar
+.env
+.env.local
+
+# dependências
+node_modules/
+
+# sistema
+.DS_Store
+*.log
+
+# build
+.next/
+*.tsbuildinfo
+.env.*
+!.env.example
